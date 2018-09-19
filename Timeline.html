@@ -157,8 +157,9 @@
 </div>
 <script>
 $.getJSON( "datanim.json", function( data ) {
-  for(var i = 0; i < data.data.length; i++) {
-    var obj = data.data[i];
+  var nim = getParameterByName('nim');
+  for(var i = 0; i < data[nim].length; i++) {
+    var obj = data[nim][i];
     var rendered = template;
     rendered = rendered.replace(/%TYPE%/g, obj.type);
     rendered = rendered.replace(/%DATE%/g, obj.date);
@@ -175,7 +176,15 @@ var template = `
     <content class='Pointy'>%CONTENT%</content>
   </div>
 `;
-
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
 </script>
 </body>
 </HTML>
