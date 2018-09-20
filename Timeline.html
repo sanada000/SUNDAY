@@ -158,24 +158,32 @@
 <script>
 $.getJSON( "datanim.json", function( data ) {
   var nim = getParameterByName('nim');
-  for(var i = 0; i < data[nim].length; i++) {
-    var obj = data[nim][i];
+  var j = 0;
+  o=[]
+  for(var i = 0; i < data.announce.length; i++) {
+    o[j++] = data.announce[i];
+  }
+  if (data[nim] != undefined) {
+	  for(var i = 0; i < data[nim].length; i++) {
+		var obj = data[nim][i];
+		o[j++] = obj 
+	  }
+  }
+	o.sort(compare);
+  for(var i = 0; i < o.length; i++) {
+	var obj = o[i];
     var rendered = template;
     rendered = rendered.replace(/%TYPE%/g, obj.type);
     rendered = rendered.replace(/%DATE%/g, obj.date);
     rendered = rendered.replace(/%CONTENT%/g, obj.content);
+	rendered = rendered.replace(/\/n/g, '<br>');
+	rendered = rendered.replace(/%LN%/g, '<br>');
     $("#timeline").append(rendered);
 	}
 }).fail(function( jqxhr, textStatus, error ) {
     $("#timeline").append("<div class='err'>Data Tidak ditemukan</div>");
 	});
-	
-var template = `
-  <div class='%TYPE%'>
-    <date>%DATE%</date>
-    <content class='Pointy'>%CONTENT%</content>
-  </div>
-`;
+
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -185,6 +193,21 @@ function getParameterByName(name, url) {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+function compare(a,b) {
+  if (Date.parse(a.date) < Date.parse(b.date))
+    return -1;
+  if (Date.parse(a.date) > Date.parse(b.date))
+    return 1;
+  return 0;
+}
+var template = `
+  <div class='%TYPE%'>
+    <date>%DATE%</date>
+    <content class='Pointy'>%CONTENT%</content>
+  </div>
+`;
+
+
 </script>
 </body>
 </HTML>
