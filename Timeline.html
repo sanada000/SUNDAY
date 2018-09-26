@@ -150,14 +150,20 @@
 	  border-left:10px solid transparent;
 	  border-right: none;
 	}
+	.b{font-size: 3.3em;
+	color: #777;}
+	#nim {color:#333; font-size:1.3em;}
 	</style>
 </head>
 <body>
+<span class="b">Bimbingan</span>
+<span id="nim"></span>
 <div id="timeline">
 </div>
 <script>
-$.getJSON( "datanim.json", function( data ) {
+$.getJSON( 'datanim.json?_=' + new Date().getTime(), function( data ) {
   var nim = getParameterByName('nim');
+  $("#nim").html(nim);
   var j = 0;
   o=[]
   for(var i = 0; i < data.announce.length; i++) {
